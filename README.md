@@ -2,7 +2,7 @@
 
 This example shows how to implement a simple chat bot using Next.js and [OpenAI API]
 
-Online Demo: 
+Online Demo: https://tienphongai.herokuapp.com/
 
 Tien Phong
 
