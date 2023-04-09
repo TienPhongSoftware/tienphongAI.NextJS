@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { type Message, initialMessages, ChatMessage } from "./chat-message";
 import { useCookies } from "react-cookie";
-
+import * as docx from "docx";
+import { saveAs } from "file-saver";
 const COOKIE_NAME = "next-openai-chatgpt";
-
+const { Document, Paragraph } = docx;
 const PreLoader = () => (
   <div className="prompt left">
     <p className="name">AI</p>
@@ -15,6 +16,9 @@ const PreLoader = () => (
     </div>
   </div>
 );
+
+
+
 
 const InputMessage = ({ input, setInput, sendMessage }: any) => (
   <div className="question">
@@ -45,6 +49,9 @@ const InputMessage = ({ input, setInput, sendMessage }: any) => (
     </button>
   </div>
 );
+
+
+
 
 export function ChatBox() {
   const [messages, setMessages] = useState<Message[]>(initialMessages);
@@ -88,6 +95,29 @@ export function ChatBox() {
 
     setLoading(false);
   };
+  
+  const exportToDoc = async () => {
+    const sections: { children: docx.Paragraph[]; }[] = [];
+    let chatText = "";
+    messages.forEach(({ message, who }) => {
+      const chatText = new docx.TextRun(`${who}: ${message}\n`)
+      // chatText += `${who}: ${message}\n`;
+      
+    });
+    sections.push({ children: [new docx.Paragraph(chatText)] });
+    const doc = new docx.Document({
+      sections: sections
+    });
+    const fileName = "chat.docx";
+    const blob = await docx.Packer.toBlob(doc);
+    saveAs(blob, fileName);
+  };
+
+    const clearChat = () =>{
+      setMessages([]);
+    };
+ 
+  
 
   return (
     <div className="dialogue">
@@ -102,6 +132,9 @@ export function ChatBox() {
         setInput={setInput}
         sendMessage={sendMessage}
       />
+      <button onClick={clearChat}>Clear Chat</button>
+      <button onClick={exportToDoc}>Export Chat</button>
     </div>
   );
 }
+
