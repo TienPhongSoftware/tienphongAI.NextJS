@@ -97,15 +97,16 @@ export function ChatBox() {
   };
   
   const exportToDoc = async () => {
-    const doc = new docx.Document({
-      sections: [{
-        children: []
-      }]
-    });
     const sections: { children: docx.Paragraph[]; }[] = [];
+    let chatText = "";
     messages.forEach(({ message, who }) => {
-      const text = `${who}: ${message}\n`;
-      sections.push({ children: [new Paragraph(text)] });
+      const chatText = new docx.TextRun(`${who}: ${message}\n`)
+      // chatText += `${who}: ${message}\n`;
+      
+    });
+    sections.push({ children: [new docx.Paragraph(chatText)] });
+    const doc = new docx.Document({
+      sections: sections
     });
     const fileName = "chat.docx";
     const blob = await docx.Packer.toBlob(doc);

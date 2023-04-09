@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "docx": "^8.0.2",
+    "docxtemplater": "^3.36.1",
     "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "next": "latest",
     "react": "latest",
     "react-cookie": "^4.1.1",
